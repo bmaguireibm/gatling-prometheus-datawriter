@@ -29,3 +29,4 @@ object ConsoleDataWriterType extends DataWriterType("console", "io.gatling.core.
 object FileDataWriterType extends DataWriterType("file", "io.gatling.core.stats.writer.LogFileDataWriter")
 object GraphiteDataWriterType extends DataWriterType("graphite", "io.gatling.graphite.GraphiteDataWriter")
 object LeakReporterDataWriterType extends DataWriterType("leak", "io.gatling.core.stats.writer.LeakReporterDataWriter")
+object PrometheusDataWriterType extends DataWriterType("prometheus", "io.gatling.prometheus.PrometheusDataWriter")

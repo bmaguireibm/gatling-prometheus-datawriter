@@ -144,6 +144,9 @@ object ConfigKeys {
       val BufferSize = "gatling.data.graphite.bufferSize"
       val WritePeriod = "gatling.data.graphite.writePeriod"
     }
+    object prometheus {
+      val Port = "gatling.data.prometheus.port"
+    }
   }
 
   // [fl]

@@ -65,6 +65,9 @@ object Dependencies {
   private val fastUuid                       = "com.eatthepath"                       % "fast-uuid"                       % "0.1"
   private val testInterface                  = "org.scala-sbt"                        % "test-interface"                  % "1.0"
   private val pebble                         = "io.pebbletemplates"                   % "pebble"                          % "3.0.6"
+  private val simpleClient                   = "io.prometheus"                        % "simpleclient"                    % "0.6.0"
+  private val simpleClientHttpServe          = "io.prometheus"                        % "simpleclient_httpserver"         % "0.6.0"
+
 
   // Test dependencies
 
@@ -111,6 +114,8 @@ object Dependencies {
   val chartsDependencies = tdigest +: testDeps
 
   val graphiteDependencies = hdrHistogram +: testDeps
+
+  val prometheusDependencies = Seq(simpleClient, simpleClientHttpServe) ++ testDeps
 
   val benchmarkDependencies = Seq(jmh)
 

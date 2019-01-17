@@ -234,6 +234,9 @@ object GatlingConfiguration extends StrictLogging {
           rootPathPrefix = config.getString(data.graphite.RootPathPrefix),
           bufferSize = config.getInt(data.graphite.BufferSize),
           writePeriod = config.getInt(data.graphite.WritePeriod) seconds
+        ),
+        prometheus = PrometheusDataWriterConfiguration(
+          port = config.getInt(data.prometheus.Port)
         )
       ),
       // [fl]
@@ -389,7 +392,8 @@ case class DataConfiguration(
     file:        FileDataWriterConfiguration,
     leak:        LeakDataWriterConfiguration,
     console:     ConsoleDataWriterConfiguration,
-    graphite:    GraphiteDataWriterConfiguration
+    graphite:    GraphiteDataWriterConfiguration,
+    prometheus:  PrometheusDataWriterConfiguration
 ) {
 
   def fileDataWriterEnabled: Boolean = dataWriters.contains(FileDataWriterType)
@@ -416,6 +420,10 @@ case class GraphiteDataWriterConfiguration(
     rootPathPrefix: String,
     bufferSize:     Int,
     writePeriod:    FiniteDuration
+)
+
+case class PrometheusDataWriterConfiguration(
+    port: Int
 )
 
 // [fl]
