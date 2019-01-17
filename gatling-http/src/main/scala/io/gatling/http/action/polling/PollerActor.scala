@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -130,6 +130,12 @@ class PollerActor(
       cancelTimer(PollTimerName)
       nextActor ! session.remove(pollerName)
       stop()
+  }
+
+  whenUnhandled {
+    case Event(message, state) =>
+      logger.debug(s"Can't handle $message in state $state")
+      stay()
   }
 
   initialize()

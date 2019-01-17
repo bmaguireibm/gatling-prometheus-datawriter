@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ private[feeder] object ArrayBasedMap {
 
 private[feeder] class ArrayBasedMap[K, +V](keys: Array[K], values: Array[V], override val size: Int) extends AbstractMap[K, V] with Map[K, V] with Serializable {
 
-  override def +[V1 >: V](kv: (K, V1)) = throw new UnsupportedOperationException
+  override def +[V1 >: V](kv: (K, V1)): Map[K, V1] = updated(kv._1, kv._2)
 
-  override def updated[V1 >: V](key: K, value: V1): Map[K, V1] = throw new UnsupportedOperationException
+  override def updated[V1 >: V](key: K, value: V1): Map[K, V1] = Map.empty[K, V1] ++ this + (key -> value)
 
   override def get(key: K): Option[V] = {
     var i = 0
@@ -54,5 +54,5 @@ private[feeder] class ArrayBasedMap[K, +V](keys: Array[K], values: Array[V], ove
     }
   }
 
-  override def -(key: K) = throw new UnsupportedOperationException
+  override def -(key: K): Map[K, V] = Map.empty[K, V] ++ this - key
 }

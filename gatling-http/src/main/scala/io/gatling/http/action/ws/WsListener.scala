@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ class WsListener(wsActor: ActorRef, statsEngine: StatsEngine, clock: Clock) exte
   private var cookies: List[Cookie] = Nil
 
   //[fl]
-  //
   //
   //
   //

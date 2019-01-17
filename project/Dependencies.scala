@@ -7,7 +7,7 @@ object Dependencies {
   // format: OFF
   private def scalaReflect(version: String)  = "org.scala-lang"             % "scala-reflect"                   % version
   private def scalaCompiler(version: String) = "org.scala-lang"             % "scala-compiler"                  % version
-  private val scalaSwing                     = "org.scala-lang.modules"              %% "scala-swing"                     % "2.0.3"
+  private val scalaSwing                     = "org.scala-lang.modules"              %% "scala-swing"                     % "2.1.0"
   private val scalaXml                       = "org.scala-lang.modules"              %% "scala-xml"                       % "1.1.1"
   private val scalaParserCombinators         = "org.scala-lang.modules"              %% "scala-parser-combinators"        % "1.1.1"
   private val java8Compat                    = "org.scala-lang.modules"              %% "scala-java8-compat"              % "0.9.0"
@@ -29,19 +29,19 @@ object Dependencies {
   private val spire                          = ("org.typelevel"                      %% "spire-macros"                    % "0.16.0")
     .exclude("org.typelevel", "machinist_2.12")
     .exclude("org.typelevel", "algebra_2.12")
-  private val scopt                          = "com.github.scopt"                    %% "scopt"                           % "3.7.0"
-  private val scalaLogging                   = "com.typesafe.scala-logging"          %% "scala-logging"                   % "3.9.0"
-  private val jackson                        = "com.fasterxml.jackson.core"           % "jackson-databind"                % "2.9.7"
-  private val sfm                            = ("org.simpleflatmapper"                % "lightning-csv"                   % "6.0.10")
+  private val scopt                          = "com.github.scopt"                    %% "scopt"                           % "3.7.1"
+  private val scalaLogging                   = "com.typesafe.scala-logging"          %% "scala-logging"                   % "3.9.2"
+  private val jackson                        = "com.fasterxml.jackson.core"           % "jackson-databind"                % "2.9.8"
+  private val sfm                            = ("org.simpleflatmapper"                % "lightning-csv"                   % "6.1.1")
     .exclude("org.simpleflatmapper", "ow2-asm")
-  private val sfmUtil                        = "org.simpleflatmapper"                 % "sfm-util"                        % sfm.revision
-  private val json4sJackson                  = "org.json4s"                          %% "json4s-jackson"                  % "3.6.2"
+  private val sfmUtil                        = sfm.organization                       % "sfm-util"                        % sfm.revision
+  private val json4sJackson                  = "org.json4s"                          %% "json4s-jackson"                  % "3.6.3"
   private val jsonpath                       = "io.gatling"                          %% "jsonpath"                        % "0.6.14"
   private val joddJson                       = "org.jodd"                             % "jodd-json"                       % "5.0.6"
   private val joddLagarto                    = joddJson.organization                  % "jodd-lagarto"                    % joddJson.revision
   private val boopickle                      = "io.suzaku"                           %% "boopickle"                       % "1.3.0"
-  private val redisClient                    = "net.debasishg"                       %% "redisclient"                     % "3.7"
-  private val zinc                           = ("org.scala-sbt"                      %% "zinc"                            % "1.2.4")
+  private val redisClient                    = "net.debasishg"                       %% "redisclient"                     % "3.9"
+  private val zinc                           = ("org.scala-sbt"                      %% "zinc"                            % "1.2.5")
     .exclude("org.scala-lang.modules", "scala-parser-combinators_2.12")
     .exclude("org.scala-lang.modules", "scala-xml_2.12")
     .exclude("org.scala-sbt", "launcher-interface")
@@ -54,23 +54,22 @@ object Dependencies {
     .exclude("jline", "jline")
     .exclude("org.apache.logging.log4j", "log4j-api")
     .exclude("org.apache.logging.log4j", "log4j-core")
-  private val compilerBridge                 = "org.scala-sbt"                       %% "compiler-bridge"                 % zinc.revision
+  private val compilerBridge                 = zinc.organization                     %% "compiler-bridge"                 % zinc.revision
+  private val testInterface                  = zinc.organization                      % "test-interface"                  % "1.0"
   private val jmsApi                         = "org.apache.geronimo.specs"            % "geronimo-jms_1.1_spec"           % "1.1.1"
   private val logback                        = "ch.qos.logback"                       % "logback-classic"                 % "1.2.3"
   private val tdigest                        = "com.tdunning"                         % "t-digest"                        % "3.1"
   private val hdrHistogram                   = "org.hdrhistogram"                     % "HdrHistogram"                    % "2.1.10"
   private val caffeine                       = "com.github.ben-manes.caffeine"        % "caffeine"                        % "2.6.2"
-  private val bouncycastle                   = "org.bouncycastle"                     % "bcpkix-jdk15on"                  % "1.60"
+  private val bouncyCastle                   = "org.bouncycastle"                     % "bcpkix-jdk15on"                  % "1.60"
   private val quicklens                      = "com.softwaremill.quicklens"          %% "quicklens"                       % "1.4.11"
   private val fastUuid                       = "com.eatthepath"                       % "fast-uuid"                       % "0.1"
-  private val testInterface                  = "org.scala-sbt"                        % "test-interface"                  % "1.0"
-  private val pebble                         = "io.pebbletemplates"                   % "pebble"                          % "3.0.6"
   private val simpleClient                   = "io.prometheus"                        % "simpleclient"                    % "0.6.0"
   private val simpleClientHttpServe          = "io.prometheus"                        % "simpleclient_httpserver"         % "0.6.0"
 
+  private val pebble                         = "io.pebbletemplates"                   % "pebble"                          % "3.0.7"
 
   // Test dependencies
-
   private val scalaTest                      = "org.scalatest"                       %% "scalatest"                       % "3.0.5"             % "test"
   private val scalaCheck                     = "org.scalacheck"                      %% "scalacheck"                      % "1.14.0"            % "test"
   private val akkaTestKit                    = akka.organization                     %% "akka-testkit"                    % akka.revision       % "test"
@@ -122,7 +121,7 @@ object Dependencies {
   def compilerDependencies(scalaVersion: String) =
     Seq(scalaCompiler(scalaVersion), scalaReflect(scalaVersion), config, slf4jApi, logback, zinc, compilerBridge, scopt)
 
-  val recorderDependencies = Seq(scalaSwing, jackson, json4sJackson, bouncycastle, netty, akka) ++ testDeps
+  val recorderDependencies = Seq(scalaSwing, jackson, json4sJackson, bouncyCastle, netty, akka) ++ testDeps
 
   val testFrameworkDependencies = Seq(testInterface)
 

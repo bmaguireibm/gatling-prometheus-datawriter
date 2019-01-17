@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -212,8 +212,12 @@ public class RequestBuilder {
       headers.set(COOKIE, ClientCookieEncoder.LAX.encode(cookies));
     }
 
-    if (!headers.contains(ORIGIN)) {
-      headers.set(ORIGIN, originHeader(uri));
+    String referer = headers.get(REFERER);
+    if (!headers.contains(ORIGIN)
+      && !HttpMethod.GET.equals(method)
+      && !HttpMethod.HEAD.equals(method)
+      && referer != null) {
+      headers.set(ORIGIN, originHeader(Uri.create(referer)));
     }
 
     if (!headers.contains(HOST)) {

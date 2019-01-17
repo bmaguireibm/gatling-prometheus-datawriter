@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -136,8 +136,11 @@ class WsActor(
 
   startWith(Init, InitData)
 
-  override def unhandled(message: Any): Unit =
-    logger.debug(s"Received unhandled message $message")
+  whenUnhandled {
+    case Event(message, state) =>
+      logger.debug(s"Can't handle $message in state $state")
+      stay()
+  }
 
   initialize()
 }

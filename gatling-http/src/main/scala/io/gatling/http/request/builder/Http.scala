@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ case class Http(requestName: Expression[String]) {
   def head(url: Expression[String]): HttpRequestBuilder = httpRequest(HttpMethod.HEAD, url)
   def delete(url: Expression[String]): HttpRequestBuilder = httpRequest(HttpMethod.DELETE, url)
   def options(url: Expression[String]): HttpRequestBuilder = httpRequest(HttpMethod.OPTIONS, url)
-  def httpRequest(method: String, url: Expression[String]): HttpRequestBuilder = httpRequest(new HttpMethod(method), Left(url))
+  def httpRequest(method: String, url: Expression[String]): HttpRequestBuilder = httpRequest(HttpMethod.valueOf(method), Left(url))
   def httpRequest(method: HttpMethod, url: Expression[String]): HttpRequestBuilder = httpRequest(method, Left(url))
   def httpRequest(method: HttpMethod, urlOrURI: Either[Expression[String], Uri]): HttpRequestBuilder = new HttpRequestBuilder(CommonAttributes(requestName, method, urlOrURI), HttpAttributes())
 }

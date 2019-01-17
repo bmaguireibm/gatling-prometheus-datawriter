@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,9 @@ trait WhenIdle { this: SseActor =>
           stay()
       }
 
-    case Event(_: SseReceived, IdleData(session, _)) =>
+    case Event(SseReceived(message, timestamp), IdleData(session, _)) =>
       // server push message, just log
+      logger.debug(s"Received unmatched message=$message")
       logUnmatchedServerMessage(session)
       stay()
 

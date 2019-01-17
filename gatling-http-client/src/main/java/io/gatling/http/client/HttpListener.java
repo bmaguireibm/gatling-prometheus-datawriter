@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public interface HttpListener {
 
   default void onTcpConnectAttempt(InetSocketAddress remoteAddress) {}
 
-  default void onTcpConnectSuccess(InetSocketAddress remoteAddress, Channel channel) {}
+  default void onTcpConnectSuccess(InetSocketAddress remoteAddress) {}
 
   default void onTcpConnectFailure(InetSocketAddress remoteAddress, Throwable cause) {}
 
@@ -47,4 +47,5 @@ public interface HttpListener {
 
   default void onProtocolAwareness(boolean isHttp2) {}
 
+  default void onWrite(Channel channel) {}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +71,7 @@ public class Http2AppHandler extends ChannelDuplexHandler {
       tx.closeConnection = HttpUtils.isConnectionClose(request.getRequest().headers());
       LOGGER.debug("Write request {}", request);
 
+      tx.listener.onWrite(ctx.channel());
       request.write(ctx).addListener(f -> {
         if (f.isSuccess()) {
           Http2Stream stream = connection.stream(nextStreamId);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ trait MetaOpenInjectionSupport {
       startingUsers: Double,
       rampDuration:  FiniteDuration
   ) extends MetaInjectionProfile {
-    def startingFrom(startingUsers: Int): IncreasingUsersPerSecProfile = this.copy(startingUsers = startingUsers)
+    def startingFrom(startingUsers: Double): IncreasingUsersPerSecProfile = this.copy(startingUsers = startingUsers)
     def separatedByRampsLasting(duration: FiniteDuration): IncreasingUsersPerSecProfile = this.copy(rampDuration = duration)
 
     private[inject] def getInjectionSteps: Iterable[OpenInjectionStep] =
