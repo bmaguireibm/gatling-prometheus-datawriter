@@ -11,7 +11,7 @@ object Dependencies {
   private val scalaXml                       = "org.scala-lang.modules"              %% "scala-xml"                       % "1.1.1"
   private val scalaParserCombinators         = "org.scala-lang.modules"              %% "scala-parser-combinators"        % "1.1.1"
   private val java8Compat                    = "org.scala-lang.modules"              %% "scala-java8-compat"              % "0.9.0"
-  private val netty                          = "io.netty"                             % "netty-codec-http"                % "4.1.32.Final"
+  private val netty                          = "io.netty"                             % "netty-codec-http"                % "4.1.33.Final"
   private val nettyBuffer                    = netty.organization                     % "netty-buffer"                    % netty.revision
   private val nettyHandler                   = netty.organization                     % "netty-handler"                   % netty.revision
   private val nettyProxy                     = netty.organization                     % "netty-handler-proxy"             % netty.revision
@@ -23,7 +23,7 @@ object Dependencies {
   private val akka                           = "com.typesafe.akka"                   %% "akka-actor"                      % "2.5.19"
   private val akkaSlf4j                      = akka.organization                     %% "akka-slf4j"                      % akka.revision
   private val config                         = "com.typesafe"                         % "config"                          % "1.3.3"
-  private val saxon                          = "net.sf.saxon"                         % "Saxon-HE"                        % "9.9.0-2"
+  private val saxon                          = "net.sf.saxon"                         % "Saxon-HE"                        % "9.9.1-1"
   private val slf4jApi                       = "org.slf4j"                            % "slf4j-api"                       % "1.7.25"
   private val fastring                       = "com.dongxiguo"                       %% "fastring"                        % "1.0.0"
   private val spire                          = ("org.typelevel"                      %% "spire-macros"                    % "0.16.0")
@@ -32,7 +32,7 @@ object Dependencies {
   private val scopt                          = "com.github.scopt"                    %% "scopt"                           % "3.7.1"
   private val scalaLogging                   = "com.typesafe.scala-logging"          %% "scala-logging"                   % "3.9.2"
   private val jackson                        = "com.fasterxml.jackson.core"           % "jackson-databind"                % "2.9.8"
-  private val sfm                            = ("org.simpleflatmapper"                % "lightning-csv"                   % "6.1.1")
+  private val sfm                            = ("org.simpleflatmapper"                % "lightning-csv"                   % "6.2.1")
     .exclude("org.simpleflatmapper", "ow2-asm")
   private val sfmUtil                        = sfm.organization                       % "sfm-util"                        % sfm.revision
   private val json4sJackson                  = "org.json4s"                          %% "json4s-jackson"                  % "3.6.3"
@@ -59,7 +59,7 @@ object Dependencies {
   private val jmsApi                         = "org.apache.geronimo.specs"            % "geronimo-jms_1.1_spec"           % "1.1.1"
   private val logback                        = "ch.qos.logback"                       % "logback-classic"                 % "1.2.3"
   private val tdigest                        = "com.tdunning"                         % "t-digest"                        % "3.1"
-  private val hdrHistogram                   = "org.hdrhistogram"                     % "HdrHistogram"                    % "2.1.10"
+  private val hdrHistogram                   = "org.hdrhistogram"                     % "HdrHistogram"                    % "2.1.11"
   private val caffeine                       = "com.github.ben-manes.caffeine"        % "caffeine"                        % "2.6.2"
   private val bouncyCastle                   = "org.bouncycastle"                     % "bcpkix-jdk15on"                  % "1.60"
   private val quicklens                      = "com.softwaremill.quicklens"          %% "quicklens"                       % "1.4.11"
