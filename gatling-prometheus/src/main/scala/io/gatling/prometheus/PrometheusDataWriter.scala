@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 GatlingCorp (https://gatling.io)
+ * Copyright 2011-2019 GatlingCorp (https://gatling.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +37,13 @@ case class PrometheusData(
 class PrometheusDataWriter(clock: Clock, configuration: GatlingConfiguration) extends DataWriter[PrometheusData] {
 
   override def onInit(init: Init): PrometheusData = {
-    val port = configuration.data.prometheus.port
+    var port = configuration.data.prometheus.port
     var server: Option[HTTPServer] = None
     try {
-      server = Option(new HTTPServer(port))
-      logger.info("Started Prometheus Endpoint Server")
+      logger.info(s"trying to start Prometheus Endpoint Server on port: $port")
+      server = Option(new HTTPServer(port, true))
+      port = server.get.getPort
+      logger.info(s"Started Prometheus Endpoint Server on port: $port")
 
     } catch {
       case e: IOException => {
@@ -95,6 +97,8 @@ class PrometheusDataWriter(clock: Clock, configuration: GatlingConfiguration) ex
 
   private def onResponseMessage(response: ResponseMessage, data: PrometheusData): Unit = {
     import response.{ endTimestamp, startTimestamp, name, message, responseCode, status }
+
+    logger.debug(s"Received Response message, ${name}")
 
     data.requestLatencyHist.labels(
       data.simulation, name, message.getOrElse(""), responseCode.getOrElse("0"), status.toString
