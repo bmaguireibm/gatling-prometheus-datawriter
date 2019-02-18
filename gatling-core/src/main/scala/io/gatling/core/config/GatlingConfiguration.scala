@@ -22,7 +22,6 @@ import java.util.ResourceBundle
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.concurrent.duration._
-import scala.io.Codec
 
 import io.gatling.commons.util.ConfigHelper._
 import io.gatling.commons.util.Ssl
@@ -123,7 +122,8 @@ object GatlingConfiguration extends StrictLogging {
             cacheMaxCapacity = config.getLong(core.extract.regex.CacheMaxCapacity)
           ),
           xpath = XPathConfiguration(
-            cacheMaxCapacity = config.getLong(core.extract.xpath.CacheMaxCapacity)
+            cacheMaxCapacity = config.getLong(core.extract.xpath.CacheMaxCapacity),
+            preferJdk = config.getBoolean(core.extract.xpath.PreferJdk)
           ),
           jsonPath = JsonPathConfiguration(
             cacheMaxCapacity = config.getLong(core.extract.jsonPath.CacheMaxCapacity),
@@ -288,7 +288,6 @@ case class CoreConfiguration(
 ) {
 
   val charset: Charset = Charset.forName(encoding)
-  val codec: Codec = charset
 }
 
 case class ExtractConfiguration(
@@ -303,7 +302,8 @@ case class RegexConfiguration(
 )
 
 case class XPathConfiguration(
-    cacheMaxCapacity: Long
+    cacheMaxCapacity: Long,
+    preferJdk:        Boolean
 )
 
 case class JsonPathConfiguration(
@@ -451,6 +451,7 @@ case class GatlingConfiguration(
   def resolve[T](value: T): T = value
 
   // [fl]
+  //
   //
   //
   // [fl]

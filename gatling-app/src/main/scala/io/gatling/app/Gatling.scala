@@ -26,7 +26,6 @@ import io.gatling.app.cli.ArgsParser
 import io.gatling.core.config.GatlingConfiguration
 
 import akka.actor.ActorSystem
-import ch.qos.logback.classic.LoggerContext
 import com.typesafe.scalalogging.StrictLogging
 import org.slf4j.LoggerFactory
 
@@ -79,14 +78,14 @@ object Gatling extends StrictLogging {
         } finally {
           terminateActorSystem(system, configuration.core.shutdownTimeout milliseconds)
         }
-      RunResultProcessor(configuration).processRunResult(runResult).code
+      new RunResultProcessor(configuration).processRunResult(runResult).code
     } finally {
       val factory = LoggerFactory.getILoggerFactory
       try {
         factory.getClass.getMethod("stop").invoke(factory)
       } catch {
-        case ex: NoSuchMethodException => //Fail silently if a logging provider other than LogBack is used.
-        case NonFatal(ex)              => logger.warn("Logback failed to shutdown.", ex)
+        case _: NoSuchMethodException => //Fail silently if a logging provider other than LogBack is used.
+        case NonFatal(ex)             => logger.warn("Logback failed to shutdown.", ex)
       }
     }
 }
