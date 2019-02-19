@@ -112,8 +112,8 @@ class IncludeCode(Directive):
                     return count
 
         nonempty = filter(lambda l: l.strip(), lines)
-        tabcounts = map(lambda l: countwhile(lambda c: c == ' ', l), nonempty)
-        tabshift = min(tabcounts) if tabcounts else 0
+        tabcounts = list(map(lambda l: countwhile(lambda c: c == ' ', l), nonempty))
+        tabshift = min(tabcounts) if len(tabcounts) > 0 else 0
 
         if tabshift > 0:
             lines = map(lambda l: l[tabshift:] if len(l) > tabshift else l, lines)
