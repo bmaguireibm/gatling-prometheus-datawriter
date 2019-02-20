@@ -1,104 +1,26 @@
-import BuildSettings._
-import Bundle._
-import ConfigFiles._
-import CopyLogback._
-import Dependencies._
-import VersionFile._
-import sbt._
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
 
-// Root project
+val simpleClient                   = "io.prometheus"                        % "simpleclient"                    % "0.6.0"
+val simpleClientHttpServe          = "io.prometheus"                        % "simpleclient_httpserver"         % "0.6.0"
+val gatling                        = "io.gatling"                           % "gatling-core"                    % "3.0.3"
 
-lazy val root = Project("gatling-parent", file("."))
-  .enablePlugins(AutomateHeaderPlugin, SonatypeReleasePlugin, SphinxPlugin)
-  .dependsOn(Seq(commons, core, http, jms, jdbc, redis).map(_ % "compile->compile;test->test"): _*)
-  .aggregate(nettyUtil, commons, core, jdbc, redis, httpClient, http, jms, charts, graphite, prometheus, app, recorder, testFramework, bundle, compiler)
-  .settings(basicSettings: _*)
-  .settings(noArtifactToPublish)
-  .settings(libraryDependencies ++= docDependencies)
-  .settings(updateOptions := updateOptions.value.withGigahorse(false))
-  .settings(unmanagedSourceDirectories in Test := ((sourceDirectory in Sphinx).value ** "code").get)
+val akka                           = "com.typesafe.akka"                   %% "akka-actor"                      % "2.5.20"
+val scalaTest                      = "org.scalatest"                       %% "scalatest"                       % "3.0.5"             % "test"
+val scalaCheck                     = "org.scalacheck"                      %% "scalacheck"                      % "1.14.0"            % "test"
+val akkaTestKit                    = akka.organization                     %% "akka-testkit"                    % akka.revision       % "test"
+val mockitoCore                    = "org.mockito"                          % "mockito-core"                    % "2.23.4"            % "test"
 
-// Modules
+val testDeps = Seq(scalaTest, scalaCheck, akkaTestKit, mockitoCore)
 
-def gatlingModule(id: String) = Project(id, file(id))
-  .enablePlugins(AutomateHeaderPlugin, SonatypeReleasePlugin)
-  .settings(gatlingModuleSettings: _*)
-  .settings(updateOptions := updateOptions.value.withGigahorse(false))
-
-lazy val nettyUtil = gatlingModule("gatling-netty-util")
-  .settings(libraryDependencies ++= nettyUtilDependencies)
-
-lazy val commons = gatlingModule("gatling-commons")
-  .dependsOn(nettyUtil % "compile->compile;test->test")
-  .settings(libraryDependencies ++= commonsDependencies(scalaVersion.value))
-  .settings(generateVersionFileSettings: _*)
-
-lazy val core = gatlingModule("gatling-core")
-  .dependsOn(commons % "compile->compile;test->test")
-  .settings(libraryDependencies ++= coreDependencies)
-  .settings(copyGatlingDefaults(compiler): _*)
-
-lazy val jdbc = gatlingModule("gatling-jdbc")
-  .dependsOn(core % "compile->compile;test->test")
-  .settings(libraryDependencies ++= jdbcDependencies)
-
-lazy val redis = gatlingModule("gatling-redis")
-  .dependsOn(core % "compile->compile;test->test")
-  .settings(libraryDependencies ++= redisDependencies)
-
-lazy val httpClient = gatlingModule("gatling-http-client")
-  .dependsOn(nettyUtil % "compile->compile;test->test")
-  .settings(libraryDependencies ++= httpClientDependencies)
-
-lazy val http = gatlingModule("gatling-http")
-  .dependsOn(
-    core % "compile->compile;test->test",
-    httpClient % "compile->compile;test->test")
-  .settings(libraryDependencies ++= httpDependencies)
-
-lazy val jms = gatlingModule("gatling-jms")
-  .dependsOn(core % "compile->compile;test->test")
-  .settings(libraryDependencies ++= jmsDependencies)
-  .settings(parallelExecution in Test := false)
-
-lazy val charts = gatlingModule("gatling-charts")
-  .dependsOn(core % "compile->compile;test->test")
-  .settings(libraryDependencies ++= chartsDependencies)
-  .settings(excludeDummyComponentLibrary: _*)
-  .settings(chartTestsSettings: _*)
-
-lazy val graphite = gatlingModule("gatling-graphite")
-  .dependsOn(core % "compile->compile;test->test")
-  .settings(libraryDependencies ++= graphiteDependencies)
-
-lazy val prometheus = gatlingModule("gatling-prometheus")
-  .dependsOn(core % "compile->compile;test->test")
-  .settings(libraryDependencies ++= prometheusDependencies)
-
-lazy val compiler = gatlingModule("gatling-compiler")
-  .settings(libraryDependencies ++= compilerDependencies(scalaVersion.value))
-
-lazy val benchmarks = gatlingModule("gatling-benchmarks")
-  .dependsOn(core, http)
-  .enablePlugins(JmhPlugin)
-  .settings(libraryDependencies ++= benchmarkDependencies)
-
-lazy val app = gatlingModule("gatling-app")
-  .dependsOn(core, http, jms, jdbc, redis, graphite, charts, prometheus)
-
-lazy val recorder = gatlingModule("gatling-recorder")
-  .dependsOn(core % "compile->compile;test->test", http)
-  .settings(libraryDependencies ++= recorderDependencies)
-
-lazy val testFramework = gatlingModule("gatling-test-framework")
-  .dependsOn(app)
-  .settings(libraryDependencies ++= testFrameworkDependencies)
-
-lazy val bundle = gatlingModule("gatling-bundle")
-  .dependsOn(core, http)
-  .enablePlugins(UniversalPlugin)
-  .settings(generateConfigFiles(core): _*)
-  .settings(generateConfigFiles(recorder): _*)
-  .settings(copyLogbackXml(core): _*)
-  .settings(bundleSettings: _*)
-  .settings(noArtifactToPublish)
+lazy val prometheusPlugin = (project in file("."))
+  .settings(
+    name := "prometheusPlugin",
+    libraryDependencies += simpleClient,
+    libraryDependencies += simpleClientHttpServe,
+    libraryDependencies += gatling,
+    libraryDependencies += scalaTest,
+    libraryDependencies += scalaCheck,
+    libraryDependencies += akkaTestKit,
+    libraryDependencies += mockitoCore
+  )
