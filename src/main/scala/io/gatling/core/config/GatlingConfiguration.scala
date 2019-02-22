@@ -27,6 +27,7 @@ import io.gatling.commons.util.ConfigHelper._
 import io.gatling.commons.util.Ssl
 import io.gatling.commons.util.StringHelper._
 import io.gatling.core.ConfigKeys._
+import io.gatling.core.ConfigKeys.data
 import io.gatling.core.stats.writer._
 
 import com.typesafe.config.{ Config, ConfigFactory }

@@ -1,5 +1,33 @@
+
+
 ThisBuild / scalaVersion := "2.12.7"
-ThisBuild / organization := "com.example"
+ThisBuild / organization := "com.github.bmaguireibm"
+
+ThisBuild / organizationName := "gatling-prometheus-datawriter"
+ThisBuild / organizationHomepage := Some(url("https://github.com/bmaguireibm/gatling-prometheus-datawriter"))
+
+ThisBuild / scmInfo := Some(
+    ScmInfo(
+        url("https://github.com/bmaguireibm/gatling-prometheus-datawriter"),
+        "scm:git@github.com/bmaguireibm/gatling-prometheus-datawriter.git"
+    )
+)
+ThisBuild / developers := List(
+    Developer(
+        id    = "bmaguireibm",
+        name  = "Brian Maguire",
+        email = "maguirebrianf@gmail.com",
+        url   = url("https://github.com/bmaguireibm")
+    )
+)
+
+ThisBuild / description := "Prometheus Plugin for Gatling"
+ThisBuild / licenses := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt"))
+ThisBuild / homepage := Some(url("https://github.com/bmaguireibm/gatling-prometheus-datawriter"))
+
+// Remove all additional repository other than Maven Central from POM
+ThisBuild / pomIncludeRepository := { _ => false }
+ThisBuild / publishMavenStyle := true
 
 val simpleClient                   = "io.prometheus"                        % "simpleclient"                    % "0.6.0"
 val simpleClientHttpServe          = "io.prometheus"                        % "simpleclient_httpserver"         % "0.6.0"
@@ -19,8 +47,7 @@ lazy val prometheusPlugin = (project in file("."))
     libraryDependencies += simpleClient,
     libraryDependencies += simpleClientHttpServe,
     libraryDependencies += gatling,
-    libraryDependencies += scalaTest,
-    libraryDependencies += scalaCheck,
-    libraryDependencies += akkaTestKit,
-    libraryDependencies += mockitoCore
+    libraryDependencies ++= testDeps
   )
+
+publishTo := sonatypePublishTo.value
