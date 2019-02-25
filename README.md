@@ -32,12 +32,11 @@ dependencies {
 
 ### Direct Download
 
-If you are using the direct binary download from [here](https://gatling.io/download/), you can add the plugin by down loading the [release zip](https://github.com/bmaguireibm/gatling-prometheus-datawriter/releases/tag/3.0.3_0.0.1-beta) and extracting it into `gatling-charts-highcharts-bundle-3.0.3/plugin/` and replace `gatling.sh` or `gatling.bat` in `gatling-charts-highcharts-bundle-3.0.3/bin/` with the corresponding files in the release zip.
+If you are using the direct binary download from [gatling.io here](https://gatling.io/download/), you can add the plugin by down loading the [release zip](https://github.com/bmaguireibm/gatling-prometheus-datawriter/releases/tag/3.0.3_0.0.1-beta) and copying the `plugins` dir into `gatling-charts-highcharts-bundle-3.0.3/` and replacing `gatling.sh` or `gatling.bat` in `gatling-charts-highcharts-bundle-3.0.3/bin/` with the corresponding files in the release zip.
 
-The altered .sh and .bat files simply add the `plugin` dir to the classpath ahead of the original gatling classes.
+The altered .sh and .bat files simply add the `plugins` dir to the classpath ahead of the original gatling classes.
 
-`GATLING_CLASSPATH="$GATLING_HOME/plugins/*:$GATLING_HOME/lib/*:$GATLING_HOME/user-files:$GATLING_CONF:"
-`
+`GATLING_CLASSPATH="$GATLING_HOME/plugins/*:$GATLING_HOME/lib/*:$GATLING_HOME/user-files:$GATLING_CONF:"`
 
 
 ## Configuration
