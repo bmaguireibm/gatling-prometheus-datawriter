@@ -16,14 +16,15 @@
 
 package io.gatling.prometheus
 
-import java.io.IOException
-
 import io.gatling.commons.util.Clock
-import io.prometheus.client.{ Counter, Histogram }
-import io.prometheus.client.exporter.HTTPServer
 import io.gatling.core.config.GatlingConfiguration
-import io.gatling.core.stats.message.{ End, Start }
+import io.gatling.core.stats.message.{End, Start}
 import io.gatling.core.stats.writer._
+import io.prometheus.client.exporter.HTTPServer
+import io.prometheus.client.{Counter, Histogram}
+
+import java.io.IOException
+import java.util.Objects
 
 case class PrometheusData(
     startedUsers:       Counter,
@@ -52,13 +53,18 @@ class PrometheusDataWriter(clock: Clock, configuration: GatlingConfiguration) ex
       }
     }
     PrometheusData(
-      startedUsers = Counter.build.name("total_started_users").labelNames("simulation")
+      startedUsers = Counter.build
+        .name("total_started_users").labelNames("simulation", "scenario")
         .help("Total Gatling users Started").register,
-      finishedUsers = Counter.build.name("total_finished_users").labelNames("simulation")
+      finishedUsers = Counter.build
+        .name("total_finished_users").labelNames("simulation", "scenario")
         .help("Total Gatling users Finished").register,
-      requestLatencyHist = Histogram.build.name("requests_latency_secondsHistogram")
-        .help("Request latency in seconds.").labelNames("simulation", "metric", "error", "responseCode", "oK").register,
-      errorCounter = Counter.build.name("error_msg_count")
+      requestLatencyHist = Histogram.build
+        .name("requests_latency_secondsHistogram")
+        .help("Request latency in ms.").labelNames("simulation", "metric", "group", "sim_group_metric_hash", "error", "responseCode", "oK")
+        .buckets(.005, .01, .025, .05, .075, .1, .25, .5, .75, .8, 1, 1.2, 2.5, 5, 7.5, 10).register,
+      errorCounter = Counter.build
+        .name("error_msg_count")
         .help("Keeps count of each error message").labelNames("simulation", "errorMsg").register,
       simulation = init.runMessage.simulationId,
       server = server
@@ -89,19 +95,22 @@ class PrometheusDataWriter(clock: Clock, configuration: GatlingConfiguration) ex
 
     event match {
       case Start =>
-        data.startedUsers.labels(data.simulation).inc()
+        data.startedUsers.labels(data.simulation, user.session.scenario).inc()
       case End =>
-        data.finishedUsers.labels(data.simulation).inc()
+        data.finishedUsers.labels(data.simulation, user.session.scenario).inc()
     }
   }
 
   private def onResponseMessage(response: ResponseMessage, data: PrometheusData): Unit = {
-    import response.{ endTimestamp, startTimestamp, name, message, responseCode, status }
+    import response._
 
     logger.debug(s"Received Response message, ${name}")
 
+    val group = response.groupHierarchy.mkString("_");
+    val simGroupMetric = Objects.hash(data.simulation, group, name).toString
+
     data.requestLatencyHist.labels(
-      data.simulation, name, message.getOrElse(""), responseCode.getOrElse("0"), status.toString
+      data.simulation, name, group, simGroupMetric, message.getOrElse(""), responseCode.getOrElse("0"), status.toString
     )
       .observe((endTimestamp - startTimestamp) / 1000D)
   }

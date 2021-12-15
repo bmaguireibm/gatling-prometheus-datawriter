@@ -1,0 +1,1091 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "7.3.7"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": false,
+        "hide": false,
+        "iconColor": "#C4162A",
+        "limit": 100,
+        "matchAny": false,
+        "name": "Annotations & Alerts (LoadTest)",
+        "showIn": 0,
+        "tags": [
+          "LoadTest"
+        ],
+        "type": "tags"
+      }
+    ]
+  },
+  "description": "Gatling Report",
+  "editable": true,
+  "gnetId": 9935,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1638361641589,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "${DS_PROMETHEUS}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 11,
+      "title": "Global Information",
+      "type": "row"
+    },
+    {
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 800
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 1200
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "7.3.7",
+      "targets": [
+        {
+          "expr": "sum(rate(requests_latency_secondsHistogram_bucket{le=\"0.8\"}[$duration])) by (job)\n/\nsum(rate(requests_latency_secondsHistogram_count[$duration])) by (job)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "< 800 ms",
+          "refId": "A"
+        },
+        {
+          "expr": "(\nsum(rate(requests_latency_secondsHistogram_bucket{le=\"1.2\"}[$duration])) by (job)\n- sum(rate(requests_latency_secondsHistogram_bucket{le=\"0.8\"}[$duration])) by (job)\n)\n/\nsum(rate(requests_latency_secondsHistogram_count[$duration])) by (job)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "800 ms < t < 1200 ms",
+          "refId": "B"
+        },
+        {
+          "expr": "(\nsum(rate(requests_latency_secondsHistogram_bucket{le=\"+Inf\"}[$duration])) by (job)\n- sum(rate(requests_latency_secondsHistogram_bucket{le=\"1.2\"}[$duration])) by (job)\n)\n/\nsum(rate(requests_latency_secondsHistogram_count[$duration])) by (job)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "> 1200 ms",
+          "refId": "C"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Indicators",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 9,
+      "panels": [],
+      "repeat": "simulation",
+      "title": "Statistics $simulation",
+      "type": "row"
+    },
+    {
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "align": null,
+            "displayMode": "auto",
+            "filterable": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1.2
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Request/s"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 126
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "auto"
+              },
+              {
+                "id": "unit",
+                "value": "reqps"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OKs"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 77
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OK%"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 85
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "group"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 144
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "metric"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 256
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total Reqs"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 67
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Mean"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 72
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "99%ile"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 76
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "95%ile"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "75%ile"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "50%ile"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 107
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 5,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "group"
+          }
+        ]
+      },
+      "pluginVersion": "7.3.7",
+      "targets": [
+        {
+          "expr": "avg(rate(requests_latency_secondsHistogram_bucket{simulation=~\"$simulation\"}[$duration])) by (group, metric, sim_group_metric_hash)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{group}} {{metric}}",
+          "refId": "E"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(requests_latency_secondsHistogram_bucket{simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash, le))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "99%ile",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(requests_latency_secondsHistogram_bucket{simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash, le))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "95%ile",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.75, sum(rate(requests_latency_secondsHistogram_bucket{simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash, le))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "75%ile",
+          "refId": "C"
+        },
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(requests_latency_secondsHistogram_bucket{simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash, le))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "50%ile",
+          "refId": "D"
+        },
+        {
+          "expr": "sum(rate(requests_latency_secondsHistogram_count{oK=\"OK\",simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "OK",
+          "refId": "F"
+        },
+        {
+          "expr": "sum(rate(requests_latency_secondsHistogram_count{oK=\"KO\",simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "KO",
+          "refId": "G"
+        },
+        {
+          "expr": "sum(rate(requests_latency_secondsHistogram_count{simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Total",
+          "refId": "H"
+        },
+        {
+          "expr": "sum(rate(requests_latency_secondsHistogram_count{oK=\"KO\",simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash)\n/\nsum(rate(requests_latency_secondsHistogram_count[$duration])) by (sim_group_metric_hash)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "KO %",
+          "refId": "I"
+        },
+        {
+          "expr": "sum(rate(requests_latency_secondsHistogram_count{oK=\"OK\",simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash)\n/\nsum(rate(requests_latency_secondsHistogram_count{simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "OK %",
+          "refId": "J"
+        },
+        {
+          "expr": "sum(rate(requests_latency_secondsHistogram_count{simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash)\n/\nsum(rate(requests_latency_secondsHistogram_sum{simulation=~\"$simulation\"}[$duration])) by (sim_group_metric_hash)",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Request/s",
+          "refId": "K"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Response Times",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "sim_group_metric_hash"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Time 5": true,
+              "Time 6": true,
+              "Time 7": true,
+              "Time 8": true,
+              "Time 9": true,
+              "oK": false,
+              "oK 1": true,
+              "sim_group_metric_hash": true
+            },
+            "indexByName": {
+              "Time 1": 1,
+              "Time 2": 9,
+              "Time 3": 11,
+              "Time 4": 13,
+              "Time 5": 15,
+              "Time 6": 17,
+              "Time 7": 18,
+              "Time 8": 19,
+              "Time 9": 20,
+              "Value #A": 10,
+              "Value #B": 12,
+              "Value #C": 14,
+              "Value #D": 16,
+              "Value #E": 8,
+              "Value #F": 5,
+              "Value #H": 4,
+              "Value #J": 6,
+              "Value #K": 7,
+              "group": 2,
+              "metric": 3,
+              "sim_group_metric_hash": 0
+            },
+            "renameByName": {
+              "Time 3": "",
+              "Value #A": "99%ile",
+              "Value #B": "95%ile",
+              "Value #C": "75%ile",
+              "Value #D": "50%ile",
+              "Value #E": "Mean",
+              "Value #F": "OKs",
+              "Value #H": "Total Reqs",
+              "Value #J": "OK%",
+              "Value #K": "Request/s",
+              "oK 1": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "hiddenSeries": false,
+      "id": 2,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": true,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null as zero",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.3.7",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "sum by(simulation) (total_started_users{simulation=~\"$simulation\"}) - sum by(simulation) (total_finished_users{simulation=~\"$simulation\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{simulation}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Active Users",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "hiddenSeries": false,
+      "id": 7,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null as zero",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.3.7",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "  sum(rate(requests_latency_secondsHistogram_count{simulation=~\"$simulation\"}[$duration])) by (simulation)\n/\n  sum(rate(requests_latency_secondsHistogram_sum{simulation=~\"$simulation\"}[$duration])) by (simulation)",
+          "format": "time_series",
+          "interval": "",
+          "legendFormat": "{{simulation}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Response/s",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "reqps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 26,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "auto": true,
+        "auto_count": 500,
+        "auto_min": "1s",
+        "current": {
+          "selected": false,
+          "text": "1s",
+          "value": "1s"
+        },
+        "error": null,
+        "hide": 0,
+        "label": "granularity",
+        "name": "granularity",
+        "options": [
+          {
+            "selected": false,
+            "text": "auto",
+            "value": "$__auto_interval_granularity"
+          },
+          {
+            "selected": true,
+            "text": "1s",
+            "value": "1s"
+          },
+          {
+            "selected": false,
+            "text": "2s",
+            "value": "2s"
+          },
+          {
+            "selected": false,
+            "text": "5s",
+            "value": "5s"
+          },
+          {
+            "selected": false,
+            "text": "10s",
+            "value": "10s"
+          },
+          {
+            "selected": false,
+            "text": "30s",
+            "value": "30s"
+          },
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "2m",
+            "value": "2m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          },
+          {
+            "selected": false,
+            "text": "14d",
+            "value": "14d"
+          },
+          {
+            "selected": false,
+            "text": "30d",
+            "value": "30d"
+          }
+        ],
+        "query": "1s,2s,5s,10s,30s,1m,2m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
+      },
+      {
+        "allValue": ".*",
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
+        "definition": "label_values(total_started_users, simulation)",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Simulation",
+        "multi": true,
+        "name": "simulation",
+        "options": [],
+        "query": "label_values(total_started_users, simulation)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "SELECT \"simulation\" FROM (SELECT last(\"mean\") from \"gatling\" WHERE $timeFilter AND \"run\" =~ /^$tag$/ GROUP BY \"simulation\")",
+        "tags": [],
+        "tagsQuery": "SELECT \"run\" FROM (SELECT last(\"mean\") from \"gatling\" WHERE \"run\" <> '' AND $timeFilter GROUP BY \"run\" ORDER BY time DESC) ORDER BY time DESC LIMIT 5",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": "",
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
+        "definition": "label_values(requests_latency_secondsHistogram_count , instance)",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Load Station",
+        "multi": true,
+        "name": "host",
+        "options": [],
+        "query": "label_values(requests_latency_secondsHistogram_count , instance)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "SHOW TAG VALUES WITH KEY = \"group1\"",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": "",
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
+        "definition": "label_values(requests_latency_secondsHistogram_count, metric)",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Request",
+        "multi": true,
+        "name": "request",
+        "options": [],
+        "query": "label_values(requests_latency_secondsHistogram_count, metric)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": " SELECT \"request\" FROM (select last(\"mean\") from \"$archive\".gatling where (\"run\" =~ /^$run$/ OR \"run\" = '') AND (\"host\" =~ /^$host$/ OR \"host\" = '') AND \"simulation\" =~ /^$simulation$/ AND \"request\" != 'allRequests' AND $timeFilter AND \"group\" =~/^$tag$/ AND ( \"group\" = '0' OR (\"group\" = '1' AND \"group1\" =~ /^$group1$/) OR (\"group\" = '2' AND \"group1\" =~ /^$group1$/ AND \"group2\" =~ /^$group2$/) OR (\"group\" <> '' AND \"group\" <> '1' AND \"group\" <> '2' AND \"group1\" =~ /^$group1$/ AND \"group2\" =~ /^$group2$/ AND \"group3\" =~ /^$group3$/) )  GROUP BY \"request\")",
+        "tags": [
+          {
+            "text": "0"
+          }
+        ],
+        "tagsQuery": "SELECT \"group\" FROM (select last(\"mean\") from \"$archive\".gatling where (\"run\" =~ /^$run$/ OR \"run\" = '') AND (\"host\" =~ /^$host$/ OR \"host\" = '') AND \"simulation\" =~ /^$simulation$/ AND \"request\" != 'allRequests' AND $timeFilter AND (\"group\" = '0' OR (\"group\" = '1' AND \"group1\" =~ /^$group1$/) OR (\"group\" = '2' AND \"group1\" =~ /^$group1$/ AND \"group2\" =~ /^$group2$/) OR (\"group\" <> '' AND \"group\" <> '1' AND \"group\" <> '2' AND \"group1\" =~ /^$group1$/ AND \"group2\" =~ /^$group2$/ AND \"group3\" =~ /^$group3$/))  GROUP BY \"group\")",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": "",
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
+        "definition": "label_values(total_started_users, simulation)",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "User (Scenario)",
+        "multi": true,
+        "name": "scenario",
+        "options": [],
+        "query": "label_values(total_started_users, simulation)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "SHOW TAG VALUES WITH KEY = \"group1\"",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "auto": false,
+        "auto_count": 30,
+        "auto_min": "10s",
+        "current": {
+          "selected": false,
+          "text": "5m",
+          "value": "5m"
+        },
+        "error": null,
+        "hide": 0,
+        "label": null,
+        "name": "duration",
+        "options": [
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": true,
+            "text": "5m",
+            "value": "5m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          },
+          {
+            "selected": false,
+            "text": "14d",
+            "value": "14d"
+          },
+          {
+            "selected": false,
+            "text": "30d",
+            "value": "30d"
+          }
+        ],
+        "query": "1m,5m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
+        "queryValue": "",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "now": true,
+    "refresh_intervals": [
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "Gatling Report",
+  "uid": "3UPz-Ct7z",
+  "version": 11
+}
