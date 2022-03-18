@@ -22,7 +22,7 @@ import io.gatling.commons.util.Clock
 import io.prometheus.client.{ Counter, Histogram }
 import io.prometheus.client.exporter.HTTPServer
 import io.gatling.core.config.GatlingConfiguration
-import io.gatling.core.stats.message.{ End, Start }
+import io.gatling.core.stats.message.MessageEvent
 import io.gatling.core.stats.writer._
 
 case class PrometheusData(
@@ -66,7 +66,8 @@ class PrometheusDataWriter(clock: Clock, configuration: GatlingConfiguration) ex
   }
 
   override def onMessage(message: LoadEventMessage, data: PrometheusData): Unit = message match {
-    case user: UserMessage         => onUserMessage(user, data)
+    case user: UserEndMessage         => onUserEndMessage(user, data)
+    case user: UserStartMessage         => onUserStartMessage(user, data)
     case response: ResponseMessage => onResponseMessage(response, data)
     case error: ErrorMessage       => onErrorMessage(error, data)
     case _                         =>
@@ -84,15 +85,17 @@ class PrometheusDataWriter(clock: Clock, configuration: GatlingConfiguration) ex
       data.server.get.stop()
   }
 
-  private def onUserMessage(user: UserMessage, data: PrometheusData): Unit = {
+  private def onUserEndMessage(user: UserEndMessage, data: PrometheusData): Unit = {
     import user._
 
-    event match {
-      case Start =>
-        data.startedUsers.labels(data.simulation).inc()
-      case End =>
-        data.finishedUsers.labels(data.simulation).inc()
-    }
+    data.finishedUsers.labels(data.simulation).inc()
+
+  }
+
+  private def onUserStartMessage(user: UserStartMessage, data: PrometheusData): Unit = {
+    import user._
+
+    data.startedUsers.labels(data.simulation).inc()
   }
 
   private def onResponseMessage(response: ResponseMessage, data: PrometheusData): Unit = {
