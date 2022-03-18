@@ -31,9 +31,9 @@ ThisBuild / publishMavenStyle := true
 
 val simpleClient                   = "io.prometheus"                        % "simpleclient"                    % "0.6.0"
 val simpleClientHttpServe          = "io.prometheus"                        % "simpleclient_httpserver"         % "0.6.0"
-val gatling                        = "io.gatling"                           % "gatling-core"                    % "3.0.3"
+val gatling                        = "io.gatling"                           % "gatling-core"                    % "3.4.0"
 
-val akka                           = "com.typesafe.akka"                   %% "akka-actor"                      % "2.5.20"
+val akka                           = "com.typesafe.akka"                   %% "akka-actor"                      % "2.5.32"
 val scalaTest                      = "org.scalatest"                       %% "scalatest"                       % "3.0.5"             % "test"
 val scalaCheck                     = "org.scalacheck"                      %% "scalacheck"                      % "1.14.0"            % "test"
 val akkaTestKit                    = akka.organization                     %% "akka-testkit"                    % akka.revision       % "test"
